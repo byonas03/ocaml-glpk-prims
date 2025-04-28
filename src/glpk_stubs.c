@@ -336,6 +336,25 @@ CAMLprim value ocaml_glpk_get_col_prim(value blp, value n)
   return caml_copy_double(ans);
 }
 
+CAMLprim value ocaml_glpk_get_all_col_primals(value blp)
+{
+  CAMLparam1(blp);
+  CAMLlocal1(result);
+  LPX *lp = Lpx_val(blp);
+  int cols = lpx_get_num_cols(lp);
+  int mip = (lpx_get_class(lp) == LPX_MIP);
+
+  result = caml_alloc(cols, Double_array_tag);
+
+  for (int i = 0; i < cols; i++) {
+    double val = mip ? lpx_mip_col_val(lp, i + 1)
+                     : lpx_get_col_prim(lp, i + 1);
+    Store_double_field(result, i, val);
+  }
+
+  CAMLreturn(result);
+}
+
 CAMLprim value ocaml_glpk_get_row_prim(value blp, value n)
 {
   LPX *lp = Lpx_val(blp);
