@@ -130,14 +130,7 @@ external get_num_rows : lp -> int = "ocaml_glpk_get_num_rows"
 
 external get_num_cols : lp -> int = "ocaml_glpk_get_num_cols"
 
-let get_col_primals lp =
-  let n = get_num_cols lp in
-  let ans = Array.make n 0. in
-    for i = 0 to (n - 1)
-    do
-      ans.(i) <- get_col_primal lp i
-    done;
-    ans
+let get_col_primals : lp = "ocaml_glpk_get_all_col_primals"
 
 external scale_problem : lp -> unit = "ocaml_glpk_scale_problem"
 
